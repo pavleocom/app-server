@@ -62,8 +62,6 @@ final readonly class ForgotPasswordListener
         // TODO: I don't like this validation, is there a better way to do this?
         $route = $event->getRequest()->get('_route');
 
-        Assert::string($route);
-
         if (!$event->isMainRequest() || !str_starts_with($route, 'coop_tilleuls_forgot_password')) {
             return;
         }
