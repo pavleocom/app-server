@@ -7,6 +7,22 @@ change_ownership() {
     echo "Ownership changed to $target_user for all files and directories in the current directory."
 }
 
+xdebug_off() {
+  docker compose down
+  # Assign the filename
+  filename="docker/php/php/php.ini"
+  sed -i "s/xdebug.start_with_request = yes/xdebug.start_with_request = no/" $filename
+  docker compose up -d
+}
+
+xdebug_on() {
+  docker compose down
+  # Assign the filename
+  filename="docker/php/php/php.ini"
+  sed -i "s/xdebug.start_with_request = no/xdebug.start_with_request = yes/" $filename
+  docker compose up -d
+}
+
 if [ "$1" = "cs" ]; then
     # Execute composer run cs inside the container named 'php'
     docker exec -it php composer run cs
@@ -19,9 +35,10 @@ elif [ "$1" = "ownership" ]; then
 
     # Call the function to change ownership
     change_ownership "$target_user"
+elif [ "$1" = "xdebug-off" ]; then
+    xdebug_off
 elif [ "$1" = "xdebug-on" ]; then
-    docker compose stop && XDEBUG_MODE=debug docker compose up -d
-    echo "Restarted docker with xdebug enabled."
+    xdebug_on
 else
     command="$1"
 

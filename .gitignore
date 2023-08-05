@@ -1,5 +1,5 @@
 .php-cs-fixer.cache
-/.idea/
+#/.idea/
 /.vscode/
 
 ###> symfony/framework-bundle ###

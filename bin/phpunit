@@ -5,8 +5,6 @@ if (!ini_get('date.timezone')) {
     ini_set('date.timezone', 'UTC');
 }
 
-ini_set('error_reporting', 0);
-
 if (is_file(dirname(__DIR__).'/vendor/phpunit/phpunit/phpunit')) {
     define('PHPUNIT_COMPOSER_INSTALL', dirname(__DIR__).'/vendor/autoload.php');
     require PHPUNIT_COMPOSER_INSTALL;
