@@ -8,19 +8,17 @@ change_ownership() {
 }
 
 xdebug_off() {
-  docker compose down
   # Assign the filename
-  filename="docker/php/php/php.ini"
-  sed -i "s/xdebug.start_with_request = yes/xdebug.start_with_request = no/" $filename
-  docker compose up -d
+  filename="docker/php/custom-ini/xdebug.ini"
+  sed -i "s/xdebug.mode = debug/xdebug.mode = off/" $filename
+  docker exec -it php bash -c 'kill -USR2 1'
 }
 
 xdebug_on() {
-  docker compose down
   # Assign the filename
-  filename="docker/php/php/php.ini"
-  sed -i "s/xdebug.start_with_request = no/xdebug.start_with_request = yes/" $filename
-  docker compose up -d
+  filename="docker/php/custom-ini/xdebug.ini"
+  sed -i "s/xdebug.mode = off/xdebug.mode = debug/" $filename
+  docker exec -it php bash -c 'kill -USR2 1'
 }
 
 if [ "$1" = "cs" ]; then
