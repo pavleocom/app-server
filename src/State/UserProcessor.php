@@ -15,16 +15,13 @@ class UserProcessor implements ProcessorInterface
 {
     public function __construct(
         private UserPasswordHasherInterface $userPasswordHasher,
+
         #[Autowire(service: 'api_platform.doctrine.orm.state.persist_processor')]
         private ProcessorInterface $processor,
     ) {
     }
 
-    /**
-     * @param array<mixed> $uriVariables
-     * @param array<mixed> $context
-     */
-    public function process(mixed $data, Operation $operation, array $uriVariables = [], array $context = []): object
+    public function process(mixed $data, Operation $operation, array $uriVariables = [], array $context = [])
     {
         $user = $data;
 
