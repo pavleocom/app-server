@@ -6,10 +6,12 @@ namespace App\Tests;
 
 use ApiPlatform\Symfony\Bundle\Test\ApiTestCase;
 use ApiPlatform\Symfony\Bundle\Test\Client;
+use Exception;
 
 abstract class BaseApiTestCase extends ApiTestCase
 {
     private ?string $token = null;
+    private ?string $userId = null;
 
     public function setUp(): void
     {
@@ -18,7 +20,7 @@ abstract class BaseApiTestCase extends ApiTestCase
 
     protected function createAuthenticatedClient(): Client
     {
-        if (null === $this->token) {
+        if (null === $this->token || null === $this->userId) {
             throw new Exception('You must login before using this client. Use login method.');
         }
 
@@ -27,8 +29,8 @@ abstract class BaseApiTestCase extends ApiTestCase
 
     protected function login(string $email = 'test1@example.com', string $password = '1Password'): string
     {
-        if ($this->token) {
-            return $this->token;
+        if ($this->token && $this->userId) {
+            return $this->userId;
         }
 
         $response = static::createClient()->request('POST', '/auth', ['json' => [
@@ -39,11 +41,13 @@ abstract class BaseApiTestCase extends ApiTestCase
         $this->assertResponseIsSuccessful();
         $data = $response->toArray();
         $this->token = $data['token'];
-        return $data['token'];
+        $this->userId = $data['userId'];
+        return $data['userId'];
     }
 
     protected function logout(): void
     {
         $this->token = null;
+        $this->userId = null;
     }
 }
