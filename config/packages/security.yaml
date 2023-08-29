@@ -33,8 +33,10 @@ security:
     # Easy way to control access for large sections of your site
     # Note: Only the *first* access control that matches will be used
     access_control:
-        - { path: '^/forgot-password', role: PUBLIC_ACCESS }
+        - { path: '^/password-resets', role: PUBLIC_ACCESS, methods: ['POST', 'PUT'] }
+        - { path: '^/(_(profiler|wdt)|css|images|js)', role: PUBLIC_ACCESS }
         - { path: '^/users$', role: PUBLIC_ACCESS, methods: 'POST'}
+        - { path: '^/docs$', role: PUBLIC_ACCESS, methods: 'GET', ips: ['127.0.0.1', '::1', '172.19.0.1']}
         - { path: '^/', roles: IS_AUTHENTICATED_FULLY }
 
 when@test:

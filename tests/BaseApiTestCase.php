@@ -6,7 +6,11 @@ namespace App\Tests;
 
 use ApiPlatform\Symfony\Bundle\Test\ApiTestCase;
 use ApiPlatform\Symfony\Bundle\Test\Client;
-use Exception;
+use App\Entity\PasswordReset;
+use Doctrine\Bundle\DoctrineBundle\Registry;
+use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\Persistence\ObjectManager;
+use Webmozart\Assert\Assert;
 
 abstract class BaseApiTestCase extends ApiTestCase
 {
@@ -21,15 +25,15 @@ abstract class BaseApiTestCase extends ApiTestCase
     protected function createAuthenticatedClient(): Client
     {
         if (null === $this->token || null === $this->userId) {
-            throw new Exception('You must login before using this client. Use login method.');
+            throw new \Exception('You must login before using this client. Use login method.');
         }
 
         return static::createClient([], ['headers' => ['authorization' => 'Bearer '.$this->token]]);
     }
 
-    protected function login(string $email = 'test1@example.com', string $password = '1Password'): string
+    protected function login(string $email = 'test1@example.com', string $password = '1Password', bool $freshToken = true): string
     {
-        if ($this->token && $this->userId) {
+        if ($this->token && $this->userId && !$freshToken) {
             return $this->userId;
         }
 
@@ -42,6 +46,7 @@ abstract class BaseApiTestCase extends ApiTestCase
         $data = $response->toArray();
         $this->token = $data['token'];
         $this->userId = $data['userId'];
+
         return $data['userId'];
     }
 
@@ -49,5 +54,19 @@ abstract class BaseApiTestCase extends ApiTestCase
     {
         $this->token = null;
         $this->userId = null;
+    }
+
+    /**
+     * @param class-string $resourceClass
+     */
+    protected function getObjectManager(string $resourceClass): ObjectManager
+    {
+        $doctrine = $this->getContainer()->get('doctrine');
+        Assert::isInstanceOf($doctrine, Registry::class);
+
+        $objectManager = $doctrine->getManagerForClass($resourceClass);
+        Assert::notNull($objectManager);
+
+        return $objectManager;
     }
 }
