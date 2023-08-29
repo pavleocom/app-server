@@ -14,7 +14,7 @@ final class Version20230813144216 extends AbstractMigration
 {
     public function getDescription(): string
     {
-        return '';
+        return 'Password reset table.';
     }
 
     public function up(Schema $schema): void

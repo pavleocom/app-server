@@ -24,7 +24,7 @@ class PasswordResetTest extends BaseApiTestCase
         $this->assertResponseStatusCodeSame(expectedCode: 204);
         $this->assertEmpty($response->getContent());
 
-        $em = $this->getEntityManager(PasswordReset::class);
+        $em = $this->getObjectManager(PasswordReset::class);
         $passwordResetCollection = $em->getRepository(PasswordReset::class)->findAll();
         $this->assertCount(expectedCount: 1, haystack: $passwordResetCollection);
 

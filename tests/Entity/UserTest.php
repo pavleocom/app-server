@@ -62,7 +62,7 @@ class UserTest extends BaseApiTestCase
 
         $data = $response->toArray(throw: false);
 
-        /** @var array<int, array> $violations */
+        /** @var array<int, array<mixed>> $violations */
         $violations = $data['violations'];
 
         $this->assertCount(expectedCount: 2, haystack: $violations);

@@ -7,7 +7,10 @@ namespace App\Tests;
 use ApiPlatform\Symfony\Bundle\Test\ApiTestCase;
 use ApiPlatform\Symfony\Bundle\Test\Client;
 use App\Entity\PasswordReset;
+use Doctrine\Bundle\DoctrineBundle\Registry;
 use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\Persistence\ObjectManager;
+use Webmozart\Assert\Assert;
 
 abstract class BaseApiTestCase extends ApiTestCase
 {
@@ -53,8 +56,17 @@ abstract class BaseApiTestCase extends ApiTestCase
         $this->userId = null;
     }
 
-    protected function getEntityManager(string $resourceClass): EntityManagerInterface
+    /**
+     * @param class-string $resourceClass
+     */
+    protected function getObjectManager(string $resourceClass): ObjectManager
     {
-        return $this->getContainer()->get('doctrine')?->getManagerForClass(PasswordReset::class);
+        $doctrine = $this->getContainer()->get('doctrine');
+        Assert::isInstanceOf($doctrine, Registry::class);
+
+        $objectManager = $doctrine->getManagerForClass($resourceClass);
+        Assert::notNull($objectManager);
+
+        return $objectManager;
     }
 }
