@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\EventListener;
 
 use App\Entity\User;
-use App\Message\ForgotPasswordMessage;
+use App\Message\PasswordResetMessage;
 use CoopTilleuls\ForgotPasswordBundle\Event\CreateTokenEvent;
 use CoopTilleuls\ForgotPasswordBundle\Event\UpdatePasswordEvent;
 use Doctrine\ORM\EntityManagerInterface;
@@ -38,7 +38,7 @@ final readonly class ForgotPasswordListener
 
         $this->logger->info("[ForgotPassword] Token generated for user email: {$user?->email}");
 
-        $this->bus->dispatch(new ForgotPasswordMessage(passwordTokenId: (string) $token->getId()));
+        $this->bus->dispatch(new PasswordResetMessage(passwordTokenId: (string) $token->getId()));
     }
 
     #[AsEventListener(event: UpdatePasswordEvent::class)]

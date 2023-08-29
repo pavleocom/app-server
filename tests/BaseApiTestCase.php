@@ -6,6 +6,8 @@ namespace App\Tests;
 
 use ApiPlatform\Symfony\Bundle\Test\ApiTestCase;
 use ApiPlatform\Symfony\Bundle\Test\Client;
+use App\Entity\PasswordReset;
+use Doctrine\ORM\EntityManagerInterface;
 use Exception;
 
 abstract class BaseApiTestCase extends ApiTestCase
@@ -24,12 +26,12 @@ abstract class BaseApiTestCase extends ApiTestCase
             throw new Exception('You must login before using this client. Use login method.');
         }
 
-        return static::createClient([], ['headers' => ['authorization' => 'Bearer '.$this->token]]);
+        return static::createClient([], ['headers' => ['authorization' => 'Bearer ' . $this->token]]);
     }
 
-    protected function login(string $email = 'test1@example.com', string $password = '1Password'): string
+    protected function login(string $email = 'test1@example.com', string $password = '1Password', bool $freshToken = true): string
     {
-        if ($this->token && $this->userId) {
+        if ($this->token && $this->userId && !$freshToken) {
             return $this->userId;
         }
 
@@ -49,5 +51,10 @@ abstract class BaseApiTestCase extends ApiTestCase
     {
         $this->token = null;
         $this->userId = null;
+    }
+
+    protected function getEntityManager(string $resourceClass): EntityManagerInterface
+    {
+        return $this->getContainer()->get('doctrine')?->getManagerForClass(PasswordReset::class);
     }
 }

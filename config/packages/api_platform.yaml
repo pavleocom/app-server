@@ -1,0 +1,5 @@
+api_platform:
+  path_segment_name_generator: api_platform.path_segment_name_generator.dash
+  defaults:
+    normalization_context:
+      skip_null_values: false
