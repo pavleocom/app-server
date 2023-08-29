@@ -11,7 +11,8 @@ use Zenstruck\Foundry\Test\ResetDatabase;
 
 class UserTest extends BaseApiTestCase
 {
-    use ResetDatabase, Factories;
+    use ResetDatabase;
+    use Factories;
 
     public function testCreateUserSuccess(): void
     {
@@ -29,14 +30,14 @@ class UserTest extends BaseApiTestCase
                 '@id' => ['type' => 'string'],
                 '@type' => ['type' => 'string'],
                 'id' => ['type' => 'string'],
-                'email' => ['type' => 'string']
+                'email' => ['type' => 'string'],
             ],
             'required' => [
                 '@context',
                 '@id',
                 '@type',
                 'id',
-                'email'
+                'email',
             ],
             'additionalProperties' => false,
         ]);
@@ -67,7 +68,7 @@ class UserTest extends BaseApiTestCase
         $this->assertCount(expectedCount: 2, haystack: $violations);
 
         // sort alphabetically, then assert
-        usort($violations, fn($a, $b) => $a['propertyPath'] <=> $b['propertyPath']);
+        usort($violations, fn ($a, $b) => $a['propertyPath'] <=> $b['propertyPath']);
         $this->assertArraySubset(subset: [
             [
                 'propertyPath' => 'email',
@@ -96,14 +97,14 @@ class UserTest extends BaseApiTestCase
                 '@id' => ['type' => 'string'],
                 '@type' => ['type' => 'string'],
                 'id' => ['type' => 'string'],
-                'email' => ['type' => 'string']
+                'email' => ['type' => 'string'],
             ],
             'required' => [
                 '@context',
                 '@id',
                 '@type',
                 'id',
-                'email'
+                'email',
             ],
             'additionalProperties' => false,
         ]);
@@ -131,5 +132,4 @@ class UserTest extends BaseApiTestCase
 
         $this->assertResponseStatusCodeSame(expectedCode: 403);
     }
-
 }

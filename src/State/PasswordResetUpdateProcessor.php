@@ -24,7 +24,7 @@ class PasswordResetUpdateProcessor implements ProcessorInterface
 
     public function process(mixed $data, Operation $operation, array $uriVariables = [], array $context = [])
     {
-        /** @var ?PasswordResetUpdateDto|object $dto */
+        /** @var null|PasswordResetUpdateDto|object $dto */
         $dto = $data;
         Assert::isInstanceOf($dto, PasswordResetUpdateDto::class);
 
@@ -35,7 +35,6 @@ class PasswordResetUpdateProcessor implements ProcessorInterface
         $passwordReset = $this->em->getRepository(PasswordReset::class)->find($id);
 
         if (null !== $passwordReset && !Carbon::createFromImmutable($passwordReset->expiresAt)->isPast()) {
-
             $user = $passwordReset->user;
             $hashedPassword = $this->userPasswordHasher->hashPassword($user, $dto->plainPassword);
             $user->password = $hashedPassword;

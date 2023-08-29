@@ -13,7 +13,8 @@ use Zenstruck\Foundry\Test\ResetDatabase;
 
 class PasswordResetTest extends BaseApiTestCase
 {
-    use ResetDatabase, Factories;
+    use ResetDatabase;
+    use Factories;
 
     public function testCreatePasswordResetSuccess(): void
     {

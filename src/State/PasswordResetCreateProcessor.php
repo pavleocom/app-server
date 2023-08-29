@@ -10,7 +10,6 @@ use App\Dto\PasswordResetCreateDto;
 use App\Entity\PasswordReset;
 use App\Entity\User;
 use App\Message\PasswordResetMessage;
-use DateTimeImmutable;
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
@@ -37,17 +36,16 @@ class PasswordResetCreateProcessor implements ProcessorInterface
         $user = $this->em->getRepository(User::class)->findOneBy(['email' => $submittedEmail]);
 
         if (null !== $user) {
-
             $criteria = new Criteria();
             $criteria->where(Criteria::expr()->eq('user', $user));
-            $criteria->andWhere(Criteria::expr()->gte('expiresAt', new DateTimeImmutable('+30 minutes')));
+            $criteria->andWhere(Criteria::expr()->gte('expiresAt', new \DateTimeImmutable('+30 minutes')));
 
             $existingPasswordReset = $this->em->getRepository(PasswordReset::class)->matching($criteria)->first();
 
             if (false === $existingPasswordReset) {
                 $passwordReset = new PasswordReset();
                 $passwordReset->user = $user;
-                $passwordReset->expiresAt = new DateTimeImmutable('+1 day');
+                $passwordReset->expiresAt = new \DateTimeImmutable('+1 day');
                 $this->processor->process($passwordReset, $operation, $uriVariables, $context);
                 $passwordResetId = $passwordReset->id;
             } else {

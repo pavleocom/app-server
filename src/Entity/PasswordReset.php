@@ -6,13 +6,11 @@ namespace App\Entity;
 
 use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Post;
-use ApiPlatform\Metadata\Put;
-use App\Dto\PasswordResetUpdateDto;
 use App\Dto\PasswordResetCreateDto;
+use App\Dto\PasswordResetUpdateDto;
 use App\Generator\CryptoSecureIdGenerator;
 use App\State\PasswordResetCreateProcessor;
 use App\State\PasswordResetUpdateProcessor;
-use DateTimeImmutable;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity]
@@ -50,13 +48,13 @@ class PasswordReset
     public User $user;
 
     #[ORM\Column]
-    public DateTimeImmutable $expiresAt;
+    public \DateTimeImmutable $expiresAt;
 
     #[ORM\Column]
-    public DateTimeImmutable $createdAt;
+    public \DateTimeImmutable $createdAt;
 
     public function __construct()
     {
-        $this->createdAt = new DateTimeImmutable();
+        $this->createdAt = new \DateTimeImmutable();
     }
 }

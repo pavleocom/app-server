@@ -13,5 +13,4 @@ class DefaultUsersStory extends Story
     {
         UserFactory::createMany(10);
     }
-
 }
