@@ -24,7 +24,7 @@ class PasswordResetUpdateProcessor implements ProcessorInterface
 
     public function process(mixed $data, Operation $operation, array $uriVariables = [], array $context = [])
     {
-        /** @var null|PasswordResetUpdateDto|object $dto */
+        /** @var PasswordResetUpdateDto|object|null $dto */
         $dto = $data;
         Assert::isInstanceOf($dto, PasswordResetUpdateDto::class);
 
