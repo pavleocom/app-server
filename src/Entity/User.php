@@ -9,6 +9,7 @@ use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\Post;
 use App\Repository\UserRepository;
 use App\State\UserProcessor;
+use App\Validator\Constraint\UniqueEmail;
 use Doctrine\ORM\Mapping as ORM;
 use Ramsey\Uuid\Doctrine\UuidGenerator;
 use Ramsey\Uuid\UuidInterface;
@@ -25,6 +26,8 @@ use Symfony\Component\Validator\Constraints as Assert;
         new Get(security: 'user==object'),
         new Post(
             denormalizationContext: ['groups' => ['User:W$Registration']],
+            validationContext: ['groups' => ['creation']],
+            name: 'create_user',
             processor: UserProcessor::class,
         ),
     ],
@@ -45,6 +48,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(length: 180, unique: true)]
     #[Assert\Email]
     #[Assert\NotBlank]
+    #[UniqueEmail(groups: ['creation'])]
     #[Groups([
         'User:R$Default',
         'User:W$Registration',
